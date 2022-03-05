@@ -1,0 +1,6 @@
+{
+  "appTitle": "open_show_runner",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}
