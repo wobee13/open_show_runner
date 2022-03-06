@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs: 
-  Analyze&Test:
+  Analyze_Test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
