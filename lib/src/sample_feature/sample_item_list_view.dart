@@ -1,8 +1,26 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:osc/osc.dart';
 
 import '../settings/settings_view.dart';
 import 'sample_item.dart';
 import 'sample_item_details_view.dart';
+
+void sendMessage({
+  required InternetAddress destination,
+  required int port,
+  required String address,
+}) {
+  final arguments = <Object>[];
+
+  final message = OSCMessage(address, arguments: arguments);
+
+  RawDatagramSocket.bind(InternetAddress.anyIPv4, 0).then((socket) {
+    final bytes = message.toBytes();
+    socket.send(bytes, destination, port);
+  });
+}
 
 /// Displays a list of SampleItems.
 class SampleItemListView extends StatelessWidget {
@@ -33,6 +51,24 @@ class SampleItemListView extends StatelessWidget {
         ],
       ),
 
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            ElevatedButton.icon(
+              onPressed: () => sendMessage(destination: InternetAddress('138.247.211.98'), port: 4040, address: '/eos/cue/3/fire'),
+              icon: const Icon(Icons.play_arrow_sharp),
+              label: const Text('Play'),
+            ),
+            ElevatedButton.icon(
+              onPressed: () => sendMessage(destination: InternetAddress('138.247.211.98'), port: 4040, address: '/eos/cue/2/fire'),
+              icon: const Icon(Icons.computer),
+              label: const Text('Send'),
+            ),
+          ],
+        ),
+      ),
+
       // To work with lists that may contain a large number of items, it’s best
       // to use the ListView.builder constructor.
       //
@@ -49,21 +85,20 @@ class SampleItemListView extends StatelessWidget {
           final item = items[index];
 
           return ListTile(
-            title: Text('SampleItem ${item.id}'),
-            leading: const CircleAvatar(
-              // Display the Flutter Logo image asset.
-              foregroundImage: AssetImage('assets/images/flutter_logo.png'),
-            ),
-            onTap: () {
-              // Navigate to the details page. If the user leaves and returns to
-              // the app after it has been killed while running in the
-              // background, the navigation stack is restored.
-              Navigator.restorablePushNamed(
-                context,
-                SampleItemDetailsView.routeName,
-              );
-            }
-          );
+              title: Text('SampleItem ${item.id}'),
+              leading: const CircleAvatar(
+                // Display the Flutter Logo image asset.
+                foregroundImage: AssetImage('assets/images/flutter_logo.png'),
+              ),
+              onTap: () {
+                // Navigate to the details page. If the user leaves and returns to
+                // the app after it has been killed while running in the
+                // background, the navigation stack is restored.
+                Navigator.restorablePushNamed(
+                  context,
+                  SampleItemDetailsView.routeName,
+                );
+              });
         },
       ),
     );
