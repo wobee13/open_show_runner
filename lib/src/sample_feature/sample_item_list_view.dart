@@ -1,26 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:osc/osc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:open_show_runner/src/osc/osc.dart';
 
 import '../settings/settings_view.dart';
 import 'sample_item.dart';
 import 'sample_item_details_view.dart';
-
-void sendMessage({
-  required InternetAddress destination,
-  required int port,
-  required String address,
-}) {
-  final arguments = <Object>[];
-
-  final message = OSCMessage(address, arguments: arguments);
-
-  RawDatagramSocket.bind(InternetAddress.anyIPv4, 0).then((socket) {
-    final bytes = message.toBytes();
-    socket.send(bytes, destination, port);
-  });
-}
 
 /// Displays a list of SampleItems.
 class SampleItemListView extends StatelessWidget {
@@ -56,13 +42,21 @@ class SampleItemListView extends StatelessWidget {
         child: Row(
           children: [
             ElevatedButton.icon(
-              onPressed: () => sendMessage(destination: InternetAddress('138.247.211.98'), port: 4040, address: '/eos/cue/3/fire'),
-              icon: const Icon(Icons.play_arrow_sharp),
+              onPressed: () => sendMessage(
+                destination: InternetAddress('138.247.211.98'),
+                port: 4040,
+                command: '/eos/cue/3/fire',
+              ),
+              icon: const FaIcon(FontAwesomeIcons.ethernet),
               label: const Text('Play'),
             ),
             ElevatedButton.icon(
-              onPressed: () => sendMessage(destination: InternetAddress('138.247.211.98'), port: 4040, address: '/eos/cue/2/fire'),
-              icon: const Icon(Icons.computer),
+              onPressed: () => sendMessage(
+                destination: InternetAddress('138.247.211.98'),
+                port: 4040,
+                command: '/eos/cue/2/fire',
+              ),
+              icon: const FaIcon(FontAwesomeIcons.addressBook),
               label: const Text('Send'),
             ),
           ],

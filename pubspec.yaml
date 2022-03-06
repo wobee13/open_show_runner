@@ -20,6 +20,8 @@ dependencies:
   google_fonts: ^2.3.1
   auto_size_text: ^3.0.0
   cached_network_image: ^3.2.0
+  responsive_table: ^0.2.0+2
+  font_awesome_flutter: ^9.2.0
 
   # State Management
   flutter_bloc: ^8.0.1
